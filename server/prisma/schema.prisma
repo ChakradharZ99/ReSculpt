@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url               = env("DATABASE_URL")
+  directUrl         = env("DIRECT_URL")
+}
+
+
+model User {
+  id                Int                  @id @default(autoincrement())
+  username          String
+  email             String               @unique
+  password          String
+  wasteRequirements WasteRequirement[]
+  innovativeProducts InnovativeProduct[]
+  contributions     Contribution[]
+  orders            Orders[]
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  @@map("users")
+}
+
+model WasteRequirement {
+  requirementId      Int                 @id @default(autoincrement())
+  image              String
+  name               String
+  description        String
+  price              Float
+  initialQuantity    Int
+  requiredQuantity   Int
+  color              String?
+  weight             Float?
+  length             Float?
+  width              Float?
+  height             Float?
+  uploader           User?               @relation(fields: [uploaderId], references: [id])
+  uploaderId         Int?
+  contributions      Contribution[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  @@map("waste_requirements")
+}
+
+model InnovativeProduct {
+  productId          Int                 @id @default(autoincrement())
+  image              String
+  name               String
+  description        String
+  price              Float
+  quantity           Int
+  color              String?
+  material           String?
+  weight             Float?
+  length             Float?
+  width              Float?
+  height             Float?
+  uploader           User?               @relation(fields: [uploaderId], references: [id])
+  uploaderId         Int?
+  orders             Orders[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  @@map("innovative_products")
+}
+
+model Contribution {
+  id                 Int                 @id @default(autoincrement())
+  mobile             String 
+  quantity           Int
+  address            String
+  user               User                @relation(fields: [userId], references: [id])
+  userId             Int
+  wasteRequirement   WasteRequirement    @relation(fields: [wasteRequirementId], references: [requirementId])
+  wasteRequirementId Int
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  @@map("contributions")
+}
+
+model Orders {
+  orderId           Int                 @id @default(autoincrement())
+  buyer             User                @relation(fields: [buyerId], references: [id])
+  buyerId           Int 
+  product           InnovativeProduct   @relation(fields: [productId], references: [productId])
+  productId         Int
+  boughtAt          DateTime            @default(now())
+
+  @@map("orders")
+}

@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const wasteRequirements_1 = require("../controllers/wasteRequirements");
+const authMiddleware_1 = require("../middlewares/authMiddleware");
+const wasteRequirementsRoutes = (0, express_1.Router)();
+wasteRequirementsRoutes.post('/addWasteRequirement', authMiddleware_1.authMiddleware, wasteRequirements_1.addWasteRequirement);
+wasteRequirementsRoutes.get('/getWasteRequirements', authMiddleware_1.authMiddleware, wasteRequirements_1.getWasteRequirements);
+wasteRequirementsRoutes.get('/getAllWasteRequirements', authMiddleware_1.authMiddleware, wasteRequirements_1.getAllWasteRequirements);
+wasteRequirementsRoutes.get('/getAllSatisfiedRequirements', authMiddleware_1.authMiddleware, wasteRequirements_1.getAllSatisfiedRequirements);
+wasteRequirementsRoutes.get('/requirement/:id', authMiddleware_1.authMiddleware, wasteRequirements_1.wasteReq);
+exports.default = wasteRequirementsRoutes;
