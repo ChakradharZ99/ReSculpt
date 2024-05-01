@@ -48,8 +48,8 @@ export const Signin = () => {
       {loading ? ( // Conditionally render the Loading component or the form
         <Loading /> // Render the Loading component when loading is true
       ) : (
-        <div className="flex justify-center items-center min-h-screen">
-          <div className="flex justify-center items-center">
+        <div className="flex flex-col sm:flex-row justify-center items-center min-h-screen">
+          <div className="sm:mr-8">
             <div className="w-96 h-96">
               <Lottie animationData={signinAnimation} />
             </div>
